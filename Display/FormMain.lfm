@@ -1,0 +1,173 @@
+object frmMain: TfrmMain
+  Left = 338
+  Height = 352
+  Top = 142
+  Width = 404
+  Caption = 'Seaeye Sniffer Simulator'
+  ClientHeight = 352
+  ClientWidth = 404
+  LCLVersion = '4.99.0.0'
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  object memInfo: TMemo
+    Left = 0
+    Height = 48
+    Top = 0
+    Width = 404
+    Align = alTop
+    Color = clBtnFace
+    Lines.Strings = (
+      'Goal of this app is to stress test IC-Inspection with incoming data at a rate on par with Seaeye Sniffer string.  Only $POSII string is simulated'
+    )
+    ReadOnly = True
+    TabOrder = 0
+  end
+  object lblDepth: TLabel
+    Left = 8
+    Height = 15
+    Top = 51
+    Width = 48
+    Caption = 'lblDepth'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object edtDepth: TFloatSpinEdit
+    Left = 9
+    Height = 28
+    Top = 67
+    Width = 80
+    Alignment = taCenter
+    Color = clBtnFace
+    DecimalPlaces = 1
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -15
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+    ReadOnly = True
+    TabOrder = 1
+  end
+  object lblHeading: TLabel
+    Left = 99
+    Height = 15
+    Top = 51
+    Width = 46
+    Caption = 'Heading'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object edtHeading: TFloatSpinEdit
+    Left = 100
+    Height = 28
+    Top = 67
+    Width = 80
+    Alignment = taCenter
+    Color = clBtnFace
+    DecimalPlaces = 0
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -15
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+    ReadOnly = True
+    TabOrder = 2
+  end
+  object lblPitch: TLabel
+    Left = 192
+    Height = 15
+    Top = 51
+    Width = 28
+    Caption = 'Pitch'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object edtPitch: TFloatSpinEdit
+    Left = 193
+    Height = 28
+    Top = 67
+    Width = 80
+    Alignment = taCenter
+    Color = clBtnFace
+    DecimalPlaces = 0
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -15
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+    ReadOnly = True
+    TabOrder = 3
+  end
+  object lblRoll: TLabel
+    Left = 288
+    Height = 15
+    Top = 51
+    Width = 21
+    Caption = 'Roll'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object edtRoll: TFloatSpinEdit
+    Left = 289
+    Height = 28
+    Top = 67
+    Width = 80
+    Alignment = taCenter
+    Color = clBtnFace
+    DecimalPlaces = 0
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -15
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+    ReadOnly = True
+    TabOrder = 4
+  end
+  object memOutput: TMemo
+    Left = 0
+    Height = 168
+    Top = 184
+    Width = 404
+    Align = alBottom
+    Color = clBtnFace
+    ReadOnly = True
+    TabOrder = 5
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 24
+    Top = 160
+    Width = 404
+    Align = alBottom
+    Alignment = taLeftJustify
+    Caption = '  Strings'
+    Color = 16777088
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentColor = False
+    ParentFont = False
+    TabOrder = 6
+  end
+  object btnSerial: TButton
+    Left = 200
+    Height = 25
+    Top = 104
+    Width = 75
+    Caption = 'Serial Port'
+    TabOrder = 7
+    OnClick = btnSerialClick
+  end
+  object btnStart: TButton
+    Left = 289
+    Height = 25
+    Top = 104
+    Width = 75
+    Caption = 'Start'
+    TabOrder = 8
+    OnClick = btnStartClick
+  end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    Left = 152
+    Top = 117
+  end
+end
