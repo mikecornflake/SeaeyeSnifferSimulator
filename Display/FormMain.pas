@@ -28,7 +28,7 @@ Type
     memOutput: TMemo;
     Panel1: TPanel;
     Timer1: TTimer;
-    procedure btnSerialClick(Sender: TObject);
+    Procedure btnSerialClick(Sender: TObject);
     Procedure btnStartClick(Sender: TObject);
     Procedure FormCreate(Sender: TObject);
     Procedure FormDestroy(Sender: TObject);
@@ -39,9 +39,6 @@ Type
   Public
 
   End;
-
-Const
-  NMEA_POSII_STR: String = '$POSII,D,%.1f,H,%d,R,%d,P,%d*';
 
 Var
   frmMain: TfrmMain;
@@ -86,10 +83,10 @@ Begin
     btnStart.Caption := 'Start';
 End;
 
-procedure TfrmMain.btnSerialClick(Sender: TObject);
-begin
+Procedure TfrmMain.btnSerialClick(Sender: TObject);
+Begin
   FSerial.ShowSetupDialog;
-end;
+End;
 
 Procedure TfrmMain.FormDestroy(Sender: TObject);
 Begin
