@@ -16,19 +16,21 @@
         <Filename Value="Display\FormMain.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmMain"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <TopLine Value="62"/>
-        <CursorPos X="68" Y="73"/>
+        <CursorPos X="51" Y="80"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="Classes\SerialSpammer.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
         <TopLine Value="18"/>
-        <CursorPos X="17" Y="19"/>
+        <CursorPos X="10" Y="19"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
       </Unit>
