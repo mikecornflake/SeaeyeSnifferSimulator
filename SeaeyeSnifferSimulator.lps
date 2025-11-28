@@ -18,9 +18,8 @@
         <ComponentName Value="frmMain"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="62"/>
-        <CursorPos X="51" Y="80"/>
+        <TopLine Value="144"/>
+        <CursorPos X="21" Y="149"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -28,9 +27,10 @@
       <Unit>
         <Filename Value="Classes\SerialSpammer.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="18"/>
-        <CursorPos X="10" Y="19"/>
+        <TopLine Value="100"/>
+        <CursorPos X="3" Y="119"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
       </Unit>
@@ -92,18 +92,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="Display\FormMain.pas"/>
-        <Caret Line="61" Column="22" TopLine="50"/>
-      </Position>
-      <Position>
-        <Filename Value="Display\FormMain.pas"/>
-        <Caret Line="62" Column="22" TopLine="51"/>
-      </Position>
-      <Position>
-        <Filename Value="Display\FormMain.pas"/>
-        <Caret Line="63" Column="22" TopLine="52"/>
-      </Position>
       <Position>
         <Filename Value="Display\FormMain.pas"/>
         <Caret Line="62" Column="22" TopLine="51"/>
@@ -211,6 +199,18 @@
       <Position>
         <Filename Value="..\InspectorMike-common\Support\OSSupport.pas"/>
         <Caret Line="382" TopLine="345"/>
+      </Position>
+      <Position>
+        <Filename Value="Display\FormMain.pas"/>
+        <Caret Line="80" Column="51" TopLine="63"/>
+      </Position>
+      <Position>
+        <Filename Value="Display\FormMain.pas"/>
+        <Caret Line="149" Column="21" TopLine="144"/>
+      </Position>
+      <Position>
+        <Filename Value="Classes\SerialSpammer.pas"/>
+        <Caret Line="256" Column="57" TopLine="242"/>
       </Position>
     </JumpHistory>
     <RunParams>

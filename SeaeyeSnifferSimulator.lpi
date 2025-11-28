@@ -14,6 +14,12 @@
       </XPManifest>
       <Icon Value="0"/>
     </General>
+    <VersionInfo>
+      <UseVersionInfo Value="True"/>
+      <MinorVersionNr Value="1"/>
+      <BuildNr Value="100"/>
+      <StringTable CompanyName="Inspector Mike 2.0 Pty Ltd" FileDescription="Simulates ROV Telemetry and outputs on RS232 are various different strings" InternalName="SeaeyeSnifferSimulator" LegalCopyright="(c) 2025" ProductName="SeaeyeSnifferSimulator"/>
+    </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
     </BuildModes>
@@ -25,6 +31,9 @@
       <FormatVersion Value="2"/>
     </RunParams>
     <RequiredPackages>
+      <Item>
+        <PackageName Value="IM_application"/>
+      </Item>
       <Item>
         <PackageName Value="IM_units"/>
       </Item>

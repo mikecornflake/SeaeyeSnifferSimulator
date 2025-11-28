@@ -1,5 +1,54 @@
 Unit SerialSpammer;
 
+{-------------------------------------------------------------------------------
+  Project   : SeaeyeSnifferSimulator
+  Unit      : SerialSpammer (SerialSpammer.pas)
+  Description
+    Threaded class that simulates the state of an ROV and outputs this
+    at a rate comparable with the SAAB Seaeye Outputs.
+
+    SAAB Seaeye Outputs are either via the console (COM1 & "NMEA Outputs" menu option)
+    or the older SeaeyeSniffer external box (hence the name of this software).
+
+    This module is named SerialSpammer as the Seaeye outputs do not appear regulated
+    but instead are output at maximum rate.  This makes sense when you consider the
+    original SeaeyeSniffer unit simply listened to the telemetry between the
+    ROV and the console and redirected specific fields to RS232.
+
+    For the sake of CPU sanity, this module enforces a minimum 50ms delay between the
+    broadcast of each string.
+
+  Source
+    Copyright (c) 2025
+    Inspector Mike 2.0 Pty Ltd
+    Mike Thompson (mike.cornflake@gmail.com)
+
+  History
+    2025-11-14: Creation.
+    2025-11-28: Addition of $PC1 output
+                Rationalised Simulation Code
+                Allowed for variable delay between outputs
+                Addition of this header
+
+  License
+    This file is part of SeaeyeSnifferSimulator.
+
+    It is free software: you can redistribute it and/or modify it under the
+    terms of the GNU General Public License as published by the Free Software
+    Foundation, either version 3 of the License, or (at your option) any
+    later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+    SPDX-License-Identifier: GPL-3.0-or-later
+-------------------------------------------------------------------------------}
+
 Interface
 
 Uses
@@ -8,25 +57,41 @@ Uses
 Type
   TTelemetryState = Record
     Depth: Double;
-    Heading: Integer;
-    Pitch: Integer;
-    Roll: Integer;
+    Heading: Double;
+    Pitch: Double;
+    Roll: Double;
+    CP: Double;
+  End;
+
+  TSimulationBounds = Record
+    Max: Double;
+    Min: Double;
+    Step: Double;
+    Dirn: Integer;
   End;
 
   { TSerialSpammer }
 
   TSerialSpammer = Class(TThread)
   Private
+    FEnablePC1: Boolean;
+    FEnablePOSII: Boolean;
     FLock: TCriticalSection;
-    FState: TTelemetryState;
+    FmsDelay: Integer;
     FSerial: TLazSerial;
-    FDepth, FDepthStep: Double;
-    FHeading: Double;
-    FPitch, FPitchStep: Double;
-    FRoll, FRollStep: Double;
-    FDepthDir, FPitchDir, FRollDir: Integer;
+
+    FState: TTelemetryState;
+    FDepthSim: TSimulationBounds;
+    FHeadingSim: TSimulationBounds;
+    FPitchSim: TSimulationBounds;
+    FRollSim: TSimulationBounds;
+    FCPSim: TSimulationBounds;
+
+    Procedure SetmsDelay(AValue: Integer);
     Procedure UpdateValues;
-    Function FormatNMEA: String;
+
+    Function FormatPOSII: String;
+    Function FormatPC1: String;
   Protected
     FHistory: TStringList;
 
@@ -37,6 +102,11 @@ Type
 
     Function GetState: TTelemetryState;
     Function GetHistory: String;
+
+    Property msDelay: Integer Read FmsDelay Write SetmsDelay;
+
+    Property EnablePOSII: Boolean Read FEnablePOSII Write FEnablePOSII;
+    Property EnablePC1: Boolean Read FEnablePC1 Write FEnablePC1;
   End;
 
 Implementation
@@ -45,34 +115,54 @@ Uses
   GPSSupport;
 
 Const
+  // Seaeye Falcon
   NMEA_POSII_STR = '$POSII,D,%.1f,H,%d,R,%d,P,%d*';
+
+  // Seaeye Cougar (It's an older model Sir, but it checks out)
+  NMEA_PC1_STR = '$PC1,%.1f,%.1f,%.3f';
 
   { TSerialSpammer }
 
 Constructor TSerialSpammer.Create(ASerialPort: TLazSerial);
+
+  Function InitSim(AMax, AMin, AStep: Double; ADirn: Integer): TSimulationBounds;
+  Begin
+    Result.Max := AMax;
+    Result.Min := AMin;
+    Result.Step := AStep;
+    Result.Dirn := ADirn;
+  End;
+
 Begin
   Inherited Create(False);
   FreeOnTerminate := False;
+
+  FEnablePOSII := True;
+  FEnablePC1 := True;
+
+  FmsDelay := 60; // Delay between string broadcasts
+
   FLock := TCriticalSection.Create;
   FSerial := ASerialPort;
 
   FHistory := TStringList.Create;
   FHistory.LineBreak := LineEnding;
 
-  // Initial values
-  FDepth := 5.0;
-  FDepthStep := 0.15;
-  FDepthDir := 1;
+  // Initialise values
+  FState.Depth := 6.0;
+  FDepthSim := InitSim(60, 5, 0.015, 1);
 
-  FHeading := 0;
+  FState.Heading := 90;
+  FHeadingSim := InitSim(360, 0, 0.5, 1);
 
-  FPitch := 10.0;
-  FPitchStep := 0.1;
-  FPitchDir := -1;
+  FState.Pitch := 2.0;
+  FPitchSim := InitSim(10, -10, 0.01, -1);
 
-  FRoll := -10.0;
-  FRollStep := 0.1;
-  FRollDir := 1;
+  FState.Roll := -3.0;
+  FRollSim := InitSim(10, -10, 0.01, 1);
+
+  FState.CP := -1.0;
+  FCPSim := InitSim(-0.55, -1.04, 0.001, -1);
 End;
 
 Destructor TSerialSpammer.Destroy;
@@ -86,6 +176,7 @@ End;
 Procedure TSerialSpammer.Execute;
 Var
   s: String;
+  bAlreadySent: Boolean;
 Begin
   While Not Terminated Do
   Begin
@@ -93,56 +184,81 @@ Begin
 
     If FSerial.Active Then
     Begin
-      s := FormatNMEA;
+      bAlreadySent := False;
 
-      FSerial.WriteData(s + LineEnding);
+      If FEnablePOSII Then
+      Begin
+        s := FormatPOSII;
+        FSerial.WriteData(s + LineEnding);
+
+        bAlreadySent := True;
+      End;
+
+      If FEnablePC1 Then
+      Begin
+        If bAlreadySent Then
+          Sleep(FmsDelay);
+
+        s := FormatPC1;
+        FSerial.WriteData(s + LineEnding);
+      End;
     End;
 
-    Sleep(100);
+    Sleep(FmsDelay);
   End;
 End;
 
 Procedure TSerialSpammer.UpdateValues;
+
+  Function Update(AOldValue: Double; Var ASim: TSimulationBounds): Double;
+  Begin
+    If (AOldValue >= ASim.Max) Or (AOldValue <= ASim.Min) Then
+      ASim.Dirn := -ASim.Dirn;
+
+    Result := AOldValue + ASim.Step * ASim.Dirn;
+  End;
+
 Begin
   If Not Assigned(FLock) Then
     Exit;
 
   FLock.Acquire;
   Try
-    // Depth bounce
-    FDepth := FDepth + FDepthStep * FDepthDir;
-    If (FDepth >= 60) Or (FDepth <= 5) Then
-      FDepthDir := -FDepthDir;
-
-    // Heading wrap
-    FHeading := FHeading + 0.5;
-    If FHeading >= 360 Then
-      FHeading := FHeading - 360;
-
-    // Pitch bounce
-    FPitch := FPitch + FPitchStep * FPitchDir;
-    If (FPitch >= 10) Or (FPitch <= -10) Then
-      FPitchDir := -FPitchDir;
-
-    // Roll bounce
-    FRoll := FRoll + FRollStep * FRollDir;
-    If (FRoll >= 10) Or (FRoll <= -10) Then
-      FRollDir := -FRollDir;
-
-    // Update shared state
-    FState.Depth := FDepth;
-    FState.Heading := Round(FHeading);
-    FState.Pitch := Round(FPitch);
-    FState.Roll := Round(FRoll);
+    FState.Depth := Update(FState.Depth, FDepthSim);
+    FState.Heading := Update(FState.Heading, FHeadingSim);
+    FState.Pitch := Update(FState.Pitch, FPitchSim);
+    FState.Roll := Update(FState.Roll, FRollSim);
+    FState.CP := Update(FState.CP, FCPSim);
   Finally
     FLock.Release;
   End;
 End;
 
-Function TSerialSpammer.FormatNMEA: String;
+Procedure TSerialSpammer.SetmsDelay(AValue: Integer);
 Begin
-  Result := Format(NMEA_POSII_STR, [FDepth, Round(FHeading), Round(FPitch), Round(FRoll)]);
+  If (FmsDelay = AValue) Then
+    Exit;
+
+  // Ensure this isn't so small it causes this thread to hog the CPU...
+  If (AValue <= 50) Then
+    FmsDelay := 50
+  Else
+    FmsDelay := AValue;
+End;
+
+Function TSerialSpammer.FormatPOSII: String;
+Begin
+  Result := Format(NMEA_POSII_STR, [FState.Depth, Round(FState.Heading),
+    Round(FState.Pitch), Round(FState.Roll)]);
   Result := Result + NMEA_ChecksumAsHex(Result);
+
+  FHistory.Add(Result);
+End;
+
+Function TSerialSpammer.FormatPC1: String;
+Begin
+  // Note: Not a real NMEA String (No checksum)
+  Result := Format(NMEA_PC1_STR, [FState.Depth, FState.Heading, FState.CP]);
 
   FHistory.Add(Result);
 End;

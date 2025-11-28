@@ -1,13 +1,52 @@
 Unit FormMain;
 
+{-------------------------------------------------------------------------------
+  Project   : SeaeyeSnifferSimulator
+  Unit      : FormMain (FormMain.pas)
+  Description
+    Main Form that displays:
+    - Current ROV Telemtry
+    - Configure RS232
+    - Allows for Start/Stop of RS232
+    - Allows different strings to be sent
+    - Displays log of all strings sent
+
+  Source
+    Copyright (c) 2025
+    Inspector Mike 2.0 Pty Ltd
+    Mike Thompson (mike.cornflake@gmail.com)
+
+  History
+    2025-11-14: Creation.
+    2025-11-28: Addition of this header
+                Expanded UI to include CP and two possible strings
+
+  License
+    This file is part of SeaeyeSnifferSimulator.
+
+    It is free software: you can redistribute it and/or modify it under the
+    terms of the GNU General Public License as published by the Free Software
+    Foundation, either version 3 of the License, or (at your option) any
+    later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+    SPDX-License-Identifier: GPL-3.0-or-later
+-------------------------------------------------------------------------------}
+
 {$mode objfpc}{$H+}
 
-// 4D
 Interface
 
 Uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Spin,
-  ExtCtrls, SerialSpammer, LazSerial;
+  ExtCtrls, Menus, SerialSpammer, LazSerial;
 
 Type
 
@@ -16,6 +55,8 @@ Type
   TfrmMain = Class(TForm)
     btnSerial: TButton;
     btnStart: TButton;
+    chkStrings: TCheckGroup;
+    edtCP: TFloatSpinEdit;
     lblHeading: TLabel;
     lblPitch: TLabel;
     lblRoll: TLabel;
@@ -24,14 +65,19 @@ Type
     edtHeading: TFloatSpinEdit;
     edtPitch: TFloatSpinEdit;
     edtRoll: TFloatSpinEdit;
+    lblCP: TLabel;
+    MainMenu1: TMainMenu;
     memInfo: TMemo;
     memOutput: TMemo;
+    mnuHelp: TMenuItem;
+    mnuAbout: TMenuItem;
     Panel1: TPanel;
     Timer1: TTimer;
     Procedure btnSerialClick(Sender: TObject);
     Procedure btnStartClick(Sender: TObject);
     Procedure FormCreate(Sender: TObject);
     Procedure FormDestroy(Sender: TObject);
+    procedure mnuAboutClick(Sender: TObject);
     Procedure Timer1Timer(Sender: TObject);
   Private
     FSerial: TLazSerial;
@@ -46,7 +92,7 @@ Var
 Implementation
 
 Uses
-  GPSSupport;
+  GPSSupport, FormAbout;
 
   {$R *.lfm}
 
@@ -55,8 +101,11 @@ Uses
 Procedure TfrmMain.FormCreate(Sender: TObject);
 Begin
   FSerial := TLazSerial.Create(Self);
-  FSerial.BaudRate:=br__9600;
+  FSerial.BaudRate := br__9600;
   FSpammer := TSerialSpammer.Create(FSerial);
+
+  chkStrings.Checked[0] := True;
+  chkStrings.Checked[1] := True;
 End;
 
 Procedure TfrmMain.btnStartClick(Sender: TObject);
@@ -105,15 +154,24 @@ Begin
   End;
 End;
 
+procedure TfrmMain.mnuAboutClick(Sender: TObject);
+begin
+  FormAbout.ShowAbout;
+end;
+
 Procedure TfrmMain.Timer1Timer(Sender: TObject);
 Var
   oState: TTelemetryState;
 Begin
+  FSpammer.EnablePOSII:=chkStrings.Checked[0];
+  FSpammer.EnablePC1:=chkStrings.Checked[1];
+
   oState := FSpammer.GetState;
   edtDepth.Value := oState.Depth;
   edtHeading.Value := oState.Heading;
   edtPitch.Value := oState.Pitch;
   edtRoll.Value := oState.Roll;
+  edtCP.Value := oState.CP;
 
   memOutput.Lines.Text := FSpammer.GetHistory;
 End;
