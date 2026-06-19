@@ -2,93 +2,89 @@
 <CONFIG>
   <ProjectSession>
     <PathDelim Value="\"/>
-    <Version Value="12"/>
+    <Version Value="13"/>
     <BuildModes Active="Default"/>
     <Units>
       <Unit>
         <Filename Value="SeaeyeSnifferSimulator.lpr"/>
-        <IsPartOfProject Value="True"/>
+        <UsageCount Value="22"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="18" Y="13"/>
-        <UsageCount Value="22"/>
       </Unit>
       <Unit>
         <Filename Value="Display\FormMain.pas"/>
-        <IsPartOfProject Value="True"/>
         <ComponentName Value="frmMain"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="60"/>
-        <CursorPos X="15" Y="39"/>
-        <UsageCount Value="22"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
+        <UsageCount Value="22"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="74"/>
+        <CursorPos X="15" Y="95"/>
       </Unit>
       <Unit>
         <Filename Value="Classes\SerialSpammer.pas"/>
-        <IsPartOfProject Value="True"/>
+        <Loaded Value="True"/>
+        <UsageCount Value="22"/>
         <EditorIndex Value="2"/>
         <TopLine Value="100"/>
         <CursorPos X="3" Y="119"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="A:\Code\SVN\InspectorMike - Local\Trunk\Shared\Support\GPSSupport.pas"/>
+        <UsageCount Value="10"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="125" Y="8"/>
-        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="B:\Apps\Dev\lazarus_trunk\lazarus\lcl\spin.pp"/>
         <UnitName Value="Spin"/>
+        <UsageCount Value="10"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="136"/>
         <CursorPos X="3" Y="89"/>
-        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="B:\Apps\Dev\lazarus_trunk\fpcsrc\packages\fcl-base\src\syncobjs.pp"/>
-        <EditorIndex Value="-1"/>
         <UsageCount Value="10"/>
+        <EditorIndex Value="-1"/>
       </Unit>
       <Unit>
         <Filename Value="B:\Apps\Dev\lazarus_trunk\fpcsrc\rtl\objpas\classes\classesh.inc"/>
+        <UsageCount Value="10"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="611"/>
         <CursorPos X="14" Y="631"/>
-        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="B:\Apps\Dev\lazarus_trunk\fpcsrc\rtl\objpas\classes\stringl.inc"/>
+        <UsageCount Value="10"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="195"/>
         <CursorPos X="3" Y="197"/>
-        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="B:\Apps\Dev\lazarus_trunk\config_lazarus\onlinepackagemanager\packages\LazSerial\lazserial.pas"/>
         <UnitName Value="LazSerial"/>
+        <Loaded Value="True"/>
+        <UsageCount Value="11"/>
         <EditorIndex Value="1"/>
         <TopLine Value="144"/>
         <CursorPos X="14" Y="171"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\InspectorMike-common\Support\OSSupport.pas"/>
-        <EditorIndex Value="3"/>
+        <UsageCount Value="10"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="345"/>
         <CursorPos Y="382"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\InspectorMike-common\Classes\ExportersFPVectorial.pas"/>
+        <UsageCount Value="10"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="24" Y="13"/>
-        <UsageCount Value="10"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
@@ -193,10 +189,6 @@
         <Caret Line="19" Column="17" TopLine="18"/>
       </Position>
       <Position>
-        <Filename Value="..\InspectorMike-common\Support\OSSupport.pas"/>
-        <Caret Line="382" TopLine="345"/>
-      </Position>
-      <Position>
         <Filename Value="Display\FormMain.pas"/>
         <Caret Line="80" Column="51" TopLine="63"/>
       </Position>
@@ -211,6 +203,10 @@
       <Position>
         <Filename Value="Classes\SerialSpammer.pas"/>
         <Caret Line="119" Column="3" TopLine="100"/>
+      </Position>
+      <Position>
+        <Filename Value="Display\FormMain.pas"/>
+        <Caret Line="39" Column="15" TopLine="42"/>
       </Position>
     </JumpHistory>
     <RunParams>

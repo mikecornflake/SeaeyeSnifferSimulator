@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="12"/>
+    <Version Value="13"/>
     <PathDelim Value="\"/>
     <General>
       <SessionStorage Value="InProjectDir"/>
@@ -32,10 +32,10 @@
     </RunParams>
     <RequiredPackages>
       <Item>
-        <PackageName Value="IM_application"/>
+        <PackageName Value="IM_forms"/>
       </Item>
       <Item>
-        <PackageName Value="IM_units"/>
+        <PackageName Value="IM_units.LazSerial"/>
       </Item>
       <Item>
         <PackageName Value="LCL"/>
@@ -44,18 +44,15 @@
     <Units>
       <Unit>
         <Filename Value="SeaeyeSnifferSimulator.lpr"/>
-        <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="Display\FormMain.pas"/>
-        <IsPartOfProject Value="True"/>
         <ComponentName Value="frmMain"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>
         <Filename Value="Classes\SerialSpammer.pas"/>
-        <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
   </ProjectOptions>
